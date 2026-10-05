@@ -1,11 +1,11 @@
 /**
- * Sprite generation for Rockfall.
+ * Sprite generation for Diamond Grab.
  *
  * Every tile is authored on a 16x16 virtual pixel grid and rasterized into an offscreen canvas at
  * the current tile size, so the artwork stays chunky and crisp at any zoom level, the way the
  * original Archimedes caves looked.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initArt(NS) {
   /** Archimedes-flavoured 16 color palette, keyed by the characters used in the pixel grids. */
@@ -701,4 +701,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Art = { PALETTE, SpriteSheet, GRID };
-})(window.Rockfall);
+})(window.DiamondGrab);

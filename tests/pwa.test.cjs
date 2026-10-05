@@ -36,7 +36,10 @@ const shell = shellBlock ? [...shellBlock[1].matchAll(/'([^']+)'/g)].map((m) => 
 // The deploy stamps each release into this exact line; if it changes shape the stamp silently
 // misses, phones never see new releases, and they keep running the old one.
 check('sw.js has the VERSION line the deploy stamps', /^const VERSION = 'dev';$/m.test(sw));
-check('the cache is named after the release', /const CACHE = `rockfall-\$\{VERSION\}`;/.test(sw));
+check(
+  'the cache is named after the release',
+  /const CACHE = `diamond-grab-\$\{VERSION\}`;/.test(sw),
+);
 check('the release is downloaded bypassing the browser cache', sw.includes("{ cache: 'reload' }"));
 const files = shell.filter((entry) => entry !== './');
 

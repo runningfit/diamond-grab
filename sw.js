@@ -1,5 +1,5 @@
 /**
- * Service worker for Rockfall.
+ * Service worker for Diamond Grab.
  *
  * Caches the whole game so it starts and plays with no connection, which is also what lets phones
  * install it to the home screen.
@@ -15,7 +15,7 @@ const sw = globalThis;
  * every release changes this file, which is what tells phones there is a new version to fetch.
  */
 const VERSION = 'dev';
-const CACHE = `rockfall-${VERSION}`;
+const CACHE = `diamond-grab-${VERSION}`;
 
 /** Everything the game needs to boot offline. A missing file here fails the whole install. */
 const SHELL = [
@@ -54,7 +54,7 @@ sw.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key.startsWith('rockfall-') && key !== CACHE)
+            .filter((key) => key.startsWith('diamond-grab-') && key !== CACHE)
             .map((key) => caches.delete(key)),
         ),
       )

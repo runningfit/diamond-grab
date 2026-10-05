@@ -9,7 +9,7 @@
  * Purely visual. The engine reports each cut cell and its direction; this module animates it in
  * real time, snapped to the same 16 pixel grid as the sprites.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initFx(NS) {
   /** Fragments thrown off by one cut. */
@@ -315,4 +315,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Fx = { CutterFx };
-})(window.Rockfall);
+})(window.DiamondGrab);

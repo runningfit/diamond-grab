@@ -1,10 +1,10 @@
 /**
- * Tiny Web Audio synthesizer for Rockfall.
+ * Tiny Web Audio synthesizer for Diamond Grab.
  *
  * Every sound is generated at runtime, so the game stays a single self-contained folder with no
  * binary assets to load.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initAudio(NS) {
   /** Level of the sound effects. */
@@ -194,4 +194,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Sfx = Sfx;
-})(window.Rockfall);
+})(window.DiamondGrab);

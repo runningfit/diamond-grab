@@ -1,8 +1,8 @@
 /**
- * The jukebox for Rockfall: decides what music plays. By default it shuffles, with a different
+ * The jukebox for Diamond Grab: decides what music plays. By default it shuffles, with a different
  * tune for each new cave; the player can also pick one tune or turn the music off.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initJukebox(NS) {
   const { SONGS } = NS.Music;
@@ -182,4 +182,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Jukebox = { Jukebox, CHOICES, MIN_PLAY };
-})(window.Rockfall);
+})(window.DiamondGrab);

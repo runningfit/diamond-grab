@@ -1,11 +1,11 @@
 /**
- * Cave simulation for Rockfall.
+ * Cave simulation for Diamond Grab.
  *
  * The cave is a grid that advances one logic tick at a time, exactly like the 8 and 16 bit
  * originals: the player takes a whole step, then the world is scanned from the bottom row upwards
  * so that stacks of rocks fall as a column instead of dribbling one cell per tick.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initEngine(NS) {
   /** Tile identifiers stored in the cave grid. */
@@ -593,4 +593,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Engine = { Cave, TILE, FLAG, CHARS, BOOM_STAGES, BOMB_FUSE, DIRS };
-})(window.Rockfall);
+})(window.DiamondGrab);

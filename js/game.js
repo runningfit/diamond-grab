@@ -1,9 +1,9 @@
 /**
- * Rockfall: the game shell.
+ * Diamond Grab: the game shell.
  *
  * Owns the render loop, the scrolling viewport, the score and life counters, and the panels that
  * sit between caves.
- * @param {object} NS - The Rockfall namespace holding the other modules.
+ * @param {object} NS - The Diamond Grab namespace holding the other modules.
  */
 (function initGame(NS) {
   const { Art, Engine, Fx, Jukebox, Levels, Music, Sfx, Controls } = NS;
@@ -104,7 +104,7 @@
       this.tuneLevel = null;
       this.jukebox = new Jukebox.Jukebox({
         player: new Music.MusicPlayer(),
-        mode: loadSetting('rockfall.music') || 'shuffle',
+        mode: loadSetting('diamondGrab.music') || 'shuffle',
         onSong: this.announce.bind(this),
         onChange: this.updateMusicRow.bind(this),
       });
@@ -123,7 +123,7 @@
       this.lives = 3;
       this.score = 0;
       this.nextLife = EXTRA_LIFE;
-      this.highScore = Number(loadSetting('rockfall.highScore')) || 0;
+      this.highScore = Number(loadSetting('diamondGrab.highScore')) || 0;
       this.cave = null;
       this.accumulator = 0;
       this.lastFrame = 0;
@@ -133,7 +133,7 @@
       this.introTimer = 0;
       this.completeTimer = 0;
 
-      this.setTouchMode(loadSetting('rockfall.controls') === 'pad' ? 'pad' : 'stick');
+      this.setTouchMode(loadSetting('diamondGrab.controls') === 'pad' ? 'pad' : 'stick');
       this.bindButtons();
       this.bindInstall();
       this.detectTouch();
@@ -177,7 +177,7 @@
       this.controlPicker.querySelectorAll('[data-mode]').forEach((choice) => {
         choice.addEventListener('click', () => {
           this.setTouchMode(choice.dataset.mode);
-          saveSetting('rockfall.controls', choice.dataset.mode);
+          saveSetting('diamondGrab.controls', choice.dataset.mode);
         });
       });
     }
@@ -211,7 +211,7 @@
      */
     stepMusic(direction) {
       this.unlockAudio(false);
-      saveSetting('rockfall.music', this.jukebox.step(direction));
+      saveSetting('diamondGrab.music', this.jukebox.step(direction));
     }
 
     /**
@@ -408,9 +408,9 @@
     showTitle() {
       this.state = 'title';
       this.showPanel({
-        title: 'ROCKFALL',
+        title: 'DIAMOND GRAB',
         text:
-          'Dig through the caves, collect the gems, then run for the exit before the ' +
+          'Dig through the caves, grab the diamonds, then run for the exit before the ' +
           'clock beats you. Rocks fall when you dig under them, and they crush monsters ' +
           'and miners alike.',
         keys: [
@@ -458,7 +458,7 @@
         title: `CAVE ${Levels.caveLabel(this.level)}`,
         text: this.cave.name,
         keys: [
-          `Collect ${this.cave.gemsNeeded} gems`,
+          `Grab ${this.cave.gemsNeeded} diamonds`,
           `${Math.round(this.cave.timeLeft)} seconds`,
           `${this.lives} ${this.lives === 1 ? 'miner' : 'miners'} left`,
         ],
@@ -497,7 +497,7 @@
         title: 'CAVE CLEARED',
         text: `${this.cave.name} is yours.`,
         keys: [
-          `Gems ${this.cave.gems} × ${this.cave.gemValue}`,
+          `Diamonds ${this.cave.gems} × ${this.cave.gemValue}`,
           `Time bonus ${pad(bonus, 4)}`,
           `Score ${pad(this.score, 6)}`,
         ],
@@ -545,7 +545,7 @@
     saveHighScore() {
       if (this.score > this.highScore) {
         this.highScore = this.score;
-        saveSetting('rockfall.highScore', this.highScore);
+        saveSetting('diamondGrab.highScore', this.highScore);
       }
     }
 
@@ -936,4 +936,4 @@
         .catch(() => {});
     });
   }
-})(window.Rockfall);
+})(window.DiamondGrab);

@@ -1,5 +1,5 @@
 /**
- * Background music for Rockfall.
+ * Background music for Diamond Grab.
  *
  * A tiny sequencer and a handful of synth voices, all built on Web Audio at runtime, so the songs
  * cost a few kilobytes of text rather than megabytes of audio. Songs are written as bars of 16
@@ -8,7 +8,7 @@
  * The same scheduling code drives live playback and offline rendering, so a preview rendered to
  * a file sounds exactly like the game.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initMusic(NS) {
   /** Seconds of music scheduled ahead of the audio clock while playing live. */
@@ -893,4 +893,4 @@ window.Rockfall = window.Rockfall || {};
   const SONGS = [deepSeam, crystalCavern, rockslideShuffle];
 
   NS.Music = { MusicPlayer, SONGS, render, frequency, tokens };
-})(window.Rockfall);
+})(window.DiamondGrab);

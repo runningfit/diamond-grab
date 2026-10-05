@@ -14,7 +14,7 @@ vm.createContext(sandbox);
   vm.runInContext(fs.readFileSync(path.join(SRC, file), 'utf8'), sandbox, { filename: file }),
 );
 
-const { Music, Jukebox } = sandbox.window.Rockfall;
+const { Music, Jukebox } = sandbox.window.DiamondGrab;
 const { SONGS, frequency, tokens } = Music;
 let failures = 0;
 

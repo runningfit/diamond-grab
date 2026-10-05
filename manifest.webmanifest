@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Rockfall",
-  "short_name": "Rockfall",
+  "name": "Diamond Grab",
+  "short_name": "Diamond Grab",
   "description": "Dig for gems, dodge falling rock, and reach the exit before the clock runs out.",
   "start_url": "./",
   "scope": "./",

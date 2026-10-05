@@ -16,7 +16,7 @@ vm.createContext(sandbox);
   vm.runInContext(fs.readFileSync(path.join(SRC, file), 'utf8'), sandbox, { filename: file }),
 );
 
-const { Engine, Levels } = sandbox.window.Rockfall;
+const { Engine, Levels } = sandbox.window.DiamondGrab;
 const T = Engine.TILE;
 const TICK = 0.125;
 

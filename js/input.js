@@ -1,8 +1,8 @@
 /**
- * Input handling for Rockfall: keyboard, an on screen joystick or d-pad, and a relative thumb stick
- * that works anywhere on the playfield.
+ * Input handling for Diamond Grab: keyboard, an on screen joystick or d-pad, and a relative thumb
+ * stick that works anywhere on the playfield.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initInput(NS) {
   /** Direction names mapped to grid steps. */
@@ -530,4 +530,4 @@ window.Rockfall = window.Rockfall || {};
   }
 
   NS.Controls = Controls;
-})(window.Rockfall);
+})(window.DiamondGrab);

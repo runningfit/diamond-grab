@@ -1,11 +1,11 @@
 /**
- * Cave definitions for Rockfall.
+ * Cave definitions for Diamond Grab.
  *
  * The first two caves are hand drawn to teach digging and rock pushing. Everything after that is
  * generated from a seed derived from the cave number, so the caves are endless but a given cave
  * always looks the same, exactly as the seeded caves of the era did.
  */
-window.Rockfall = window.Rockfall || {};
+window.DiamondGrab = window.DiamondGrab || {};
 
 (function initLevels(NS) {
   /** Hand drawn caves, used for the opening levels. */
@@ -387,4 +387,4 @@ window.Rockfall = window.Rockfall || {};
   };
 
   NS.Levels = { levelFor, caveLabel, HANDMADE };
-})(window.Rockfall);
+})(window.DiamondGrab);

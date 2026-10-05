@@ -1,6 +1,8 @@
-# Rockfall
+# Diamond Grab
 
-A browser remake of _Rockfall_, the 1991 Acorn Archimedes cave game by Eterna — one of the many descendants of Boulder Dash that appeared on 8 and 16 bit machines. You dig through the earth, collect the gems, dodge the rocks you dislodge, and get out through the exit before the clock runs down.
+A cave digging game for the browser and the phone. You are a miner in a red space suit with a laser cutter: dig through the earth, grab the diamonds, dodge the rocks you dislodge, and get out through the exit before the clock runs down.
+
+It is inspired by _Rockfall_, the 1991 Acorn Archimedes game by Eterna, itself one of the many descendants of Boulder Dash that appeared on 8 and 16 bit machines. Diamond Grab is a new game with its own code, art and music, and is not affiliated with either.
 
 It runs from a plain folder of static files with no build step and no dependencies, and it is meant to be played with a thumb as happily as with a keyboard.
 
@@ -57,10 +59,10 @@ By default the music shuffles, with a different tune for each new cave (retrying
 
 ## Rules of the cave
 
-- **Gems** open the exit once you have the quota shown in the status bar. Gems collected after the quota are worth double.
-- **Rocks and gems fall** when the earth beneath them is dug away, and they roll off the top of other rocks, gems and brick. Anything falling on your head kills you — once a rock is falling you cannot outrun it.
+- **Diamonds** open the exit once you have the quota shown in the status bar. Diamonds grabbed after the quota are worth double.
+- **Rocks and diamonds fall** when the earth beneath them is dug away, and they roll off the top of other rocks, diamonds and brick. Anything falling on your head kills you — once a rock is falling you cannot outrun it.
 - **Rocks push** sideways into empty space, so a wall of rock can be shifted one cell at a time.
-- **Monsters** wander the open caves at random. Drop a rock on one and it bursts into gems; touch one and you both go up.
+- **Monsters** wander the open caves at random. Drop a rock on one and it bursts into diamonds; touch one and you both go up.
 - **Pulsators** follow the cave walls rather than wandering, and are worth nothing — trap them or stay out of their way.
 - **Bombs** are picked up by walking over them and dropped in front of you with Space. The fuse is about two seconds and the blast clears a three by three hole through earth, brick, rock and anything alive in it, including you.
 - **Steel walls** survive everything. Brick does not.
@@ -68,7 +70,7 @@ By default the music shuffles, with a different tune for each new cave (retrying
 
 An extra miner arrives every 5000 points. The best score of the session is kept in local storage.
 
-Caves A and B are hand drawn to teach digging and rock pushing. Everything after that is generated from a seed derived from the cave number, so cave G is always the same cave G, and the caves never run out. Each generated cave is flood filled before it is handed over, to prove the gem quota and the exit can actually be reached; in the rare case a cave seals its own exit off, a corridor is dug to it.
+Caves A and B are hand drawn to teach digging and rock pushing. Everything after that is generated from a seed derived from the cave number, so cave G is always the same cave G, and the caves never run out. Each generated cave is flood filled before it is handed over, to prove the diamond quota and the exit can actually be reached; in the rare case a cave seals its own exit off, a corridor is dug to it.
 
 ## Layout
 
@@ -77,7 +79,7 @@ Caves A and B are hand drawn to teach digging and rock pushing. Everything after
 | `index.html`           | The page, the status bar, the panels and the touch controls       |
 | `manifest.webmanifest` | App name, colors and icons for installing to the home screen      |
 | `sw.js`                | Service worker that caches the game for offline play              |
-| `icons/`               | Home screen icons, rendered from the game's own gem sprite        |
+| `icons/`               | Home screen icons, rendered from the game's own diamond sprite    |
 | `css/style.css`        | Cabinet styling, responsive layout, the on screen pad             |
 | `js/art.js`            | The palette and every sprite, drawn on a 16×16 pixel grid in code |
 | `js/audio.js`          | Web Audio sound effects, generated at runtime                     |
@@ -91,7 +93,7 @@ Caves A and B are hand drawn to teach digging and rock pushing. Everything after
 | `tests/`               | Node tests that run the simulation headlessly                     |
 | `.github/workflows/`   | Checks every push and pull request, and deploys `main` to Pages   |
 
-There is no bundler on purpose: the scripts are plain classic scripts sharing a `window.Rockfall` namespace, so the game also runs straight off the filesystem (without offline support, which needs a web server).
+There is no bundler on purpose: the scripts are plain classic scripts sharing a `window.DiamondGrab` namespace, so the game also runs straight off the filesystem (without offline support, which needs a web server).
 
 If you add a file the game loads, add it to the `SHELL` list in `sw.js` too; `pwa.test.cjs` fails until you do, because a single missing file stops the offline copy from installing. Leave the `const VERSION = 'dev';` line in `sw.js` exactly as it is: the deploy rewrites it to name each release.
 

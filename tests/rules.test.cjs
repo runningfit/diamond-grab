@@ -13,7 +13,7 @@ vm.createContext(sandbox);
   vm.runInContext(fs.readFileSync(path.join(SRC, file), 'utf8'), sandbox, { filename: file });
 });
 
-const { Engine, Levels } = sandbox.window.Rockfall;
+const { Engine, Levels } = sandbox.window.DiamondGrab;
 const TICK = 0.125;
 let failures = 0;
 const check = (name, cond, extra = '') => {
