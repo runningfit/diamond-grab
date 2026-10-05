@@ -1,0 +1,64 @@
+# Checks the game and publishes it to GitHub Pages.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint, format, spelling and tests
+        run: npm run check
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    # Let a running deployment finish rather than cancelling it half way through.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage the site
+        # Ship the playable game only, without its tests, notes, tooling or the sprite preview page.
+        run: |
+          mkdir _site
+          cp -r index.html manifest.webmanifest sw.js css icons js _site/
+          [ ! -f CNAME ] || cp CNAME _site/
+          # Stamp the release into the service worker so phones see a new version and fetch the
+          # whole release at once. Fail the deploy if the stamp did not land.
+          sed -i "s/^const VERSION = 'dev';$/const VERSION = '${GITHUB_SHA}';/" _site/sw.js
+          grep -q "^const VERSION = '${GITHUB_SHA}';$" _site/sw.js
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

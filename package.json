@@ -1,0 +1,24 @@
+{
+  "name": "diamond-grab",
+  "version": "1.0.0",
+  "description": "A dig-and-dodge cave game for the browser and mobile.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes http-server . -p 8080 -c-1",
+    "test": "node tests/rules.test.cjs && node tests/caves.test.cjs && node tests/pwa.test.cjs && node tests/music.test.cjs",
+    "check": "npm run check:eslint && npm run check:prettier && npm run check:cspell && npm test",
+    "check:cspell": "cspell --no-progress",
+    "check:prettier": "prettier --check .",
+    "check:eslint": "eslint ."
+  },
+  "devDependencies": {
+    "cspell": "^10.0.1",
+    "eslint": "^9.39.5",
+    "eslint-config-airbnb-extended": "^3.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsdoc": "^63.3.3",
+    "globals": "^17.9.0",
+    "prettier": "^3.9.6"
+  }
+}

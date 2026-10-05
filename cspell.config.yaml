@@ -1,0 +1,35 @@
+version: "0.2"
+language: en
+dictionaries:
+  - css
+  - html
+  - typescript
+enableFiletypes:
+  - ignore
+  - properties
+  - xml
+files:
+  - "**/.*"
+  - "**/*.{css,js,json,jsonc,html,md,scss,svelte,svg,yaml,yml,xml}"
+useGitignore: true
+ignorePaths:
+  - package-lock.json
+words:
+  - appinstalled
+  - Archimedes
+  - beforeinstallprompt
+  - Eterna
+  - headlessly
+  - jsdoc
+  - playfield
+  - pulsator
+  - pulsators
+  - Rockslide
+  - Rockfall
+  - singleline
+  - WASD
+overrides:
+  # The pixel art grids in the game are strings of palette keys, not words.
+  - filename: "js/art.js"
+    ignoreRegExpList:
+      - "'[.0-9a-k]{16}'"

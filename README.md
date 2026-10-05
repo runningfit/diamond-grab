@@ -6,16 +6,16 @@ It runs from a plain folder of static files with no build step and no dependenci
 
 ## Playing it
 
-Once GitHub Pages is switched on for this repository (Settings → Pages → Source: **GitHub Actions**), every push to `main` that touches `game/` publishes the game to:
+Once GitHub Pages is switched on for this repository (Settings → Pages → Source: **GitHub Actions**), every push to `main` publishes the game to:
 
-**https://runningfit.github.io/sveltia-cms-auth/**
+**https://runningfit.github.io/diamond-grab/**
 
-The deploy runs the tests below first and publishes only the playable files, not the tests or these notes. You can also run the "Deploy Rockfall to GitHub Pages" workflow by hand from the Actions tab.
+The deploy runs the checks below first and publishes only the playable files, not the tests, tooling or these notes. Pull requests run the same checks without deploying. You can also run the "Deploy to GitHub Pages" workflow by hand from the Actions tab.
 
 To play locally, open `index.html` in a browser or serve the folder:
 
 ```sh
-npx http-server game -p 8080   # then open http://localhost:8080
+npm start   # then open http://localhost:8080
 ```
 
 ### On your phone
@@ -89,6 +89,7 @@ Caves A and B are hand drawn to teach digging and rock pushing. Everything after
 | `js/game.js`           | Render loop, scrolling viewport, score, lives and panels          |
 | `sprites.html`         | A development page that renders every sprite frame at 64 pixels   |
 | `tests/`               | Node tests that run the simulation headlessly                     |
+| `.github/workflows/`   | Checks every push and pull request, and deploys `main` to Pages   |
 
 There is no bundler on purpose: the scripts are plain classic scripts sharing a `window.Rockfall` namespace, so the game also runs straight off the filesystem (without offline support, which needs a web server).
 
@@ -97,10 +98,12 @@ If you add a file the game loads, add it to the `SHELL` list in `sw.js` too; `pw
 ## Tests
 
 ```sh
-node game/tests/rules.test.cjs   # gravity, digging, pushing, bombs, deaths
-node game/tests/caves.test.cjs   # every cave has a reachable quota and exit, plus a bot play through
-node game/tests/pwa.test.cjs     # the offline cache, the page and the manifest agree with the files
-node game/tests/music.test.cjs   # every song is well formed, and the jukebox shuffles and steps correctly
+node tests/rules.test.cjs   # gravity, digging, pushing, bombs, deaths
+node tests/caves.test.cjs   # every cave has a reachable quota and exit, plus a bot play through
+node tests/pwa.test.cjs     # the offline cache, the page and the manifest agree with the files
+node tests/music.test.cjs   # every song is well formed, and the jukebox shuffles and steps correctly
 ```
 
-All four are plain Node scripts that load the game modules into a sandbox with a stub `window`, so they need nothing installed.
+All four are plain Node scripts that load the game modules into a sandbox with a stub `window`, so they need nothing installed; `npm test` runs them all.
+
+The game itself has no dependencies. The dev tools are only for checking the code: after `npm install`, `npm run check` runs ESLint, Prettier, the spell checker and the tests, which is what CI runs before every deploy.
