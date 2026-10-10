@@ -8,9 +8,11 @@ It runs from a plain folder of static files with no build step and no dependenci
 
 ## Playing it
 
-Once GitHub Pages is switched on for this repository (Settings → Pages → Source: **GitHub Actions**), every push to `main` publishes the game to:
+The game is at:
 
-**https://runningfit.github.io/diamond-grab/**
+**https://diamondgrab.com/**
+
+It is hosted on GitHub Pages (Settings → Pages → Source: **GitHub Actions**, Custom domain: `diamondgrab.com`), and every push to `main` publishes it. The old address, https://runningfit.github.io/diamond-grab/, redirects there.
 
 The deploy runs the checks below first and publishes only the playable files, not the tests, tooling or these notes. Pull requests run the same checks without deploying. You can also run the "Deploy to GitHub Pages" workflow by hand from the Actions tab.
 
