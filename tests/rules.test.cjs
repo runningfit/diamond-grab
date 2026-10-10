@@ -158,7 +158,7 @@ const crush = new Engine.Cave({
 for (let i = 0; i < 3; i += 1) crush.tick({ dx: 0, dy: 0, bomb: false }, TICK);
 check('falling rock kills the player', !crush.alive);
 
-// --- Rock kills a monster and leaves gems ----------------------------------
+// --- Rock kills a mouse and leaves gems ------------------------------------
 const kill = new Engine.Cave({
   name: 'T',
   gemsNeeded: 1,
@@ -168,13 +168,80 @@ const kill = new Engine.Cave({
 // Arm the rock as already falling, the state it would be in after a drop.
 kill.flags[kill.at(3, 1)] |= Engine.FLAG.FALLING;
 kill.tick({ dx: 0, dy: 0, bomb: false }, TICK);
-check('falling rock destroys the monster', kill.tile(3, 2) === Engine.TILE.BOOM, kill.tile(3, 2));
+check('falling rock destroys the mouse', kill.tile(3, 2) === Engine.TILE.BOOM, kill.tile(3, 2));
 for (let i = 0; i < Engine.BOOM_STAGES + 1; i += 1) kill.tick({ dx: 0, dy: 0, bomb: false }, TICK);
 let gemsLeft = 0;
 for (let idx = 0; idx < kill.tiles.length; idx += 1) {
   if (kill.tiles[idx] === Engine.TILE.GEM) gemsLeft += 1;
 }
-check('crushed monster leaves gems behind', gemsLeft > 0, `gems=${gemsLeft}`);
+check('crushed mouse leaves gems behind', gemsLeft > 0, `gems=${gemsLeft}`);
+
+// --- Mice: each kind keeps its own pace -----------------------------------
+/** Count how many of `ticks` ticks a lone mouse spends stepping in a long empty corridor. */
+const stepsTaken = (char, ticks) => {
+  const corridor = new Engine.Cave({
+    name: 'T',
+    gemsNeeded: 1,
+    time: 100,
+    map: [
+      'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+      `W${char}                           W`,
+      'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+      'W.P.........................XW',
+      'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+    ],
+  });
+  let moves = 0;
+
+  for (let i = 0; i < ticks; i += 1) {
+    corridor.tick({ dx: 0, dy: 0, bomb: false }, TICK);
+    moves += corridor.moves.size;
+  }
+
+  return moves;
+};
+check('the fat grey mouse steps every third tick', stepsTaken('f', 12) === 4, stepsTaken('f', 12));
+check('the brown mouse steps every other tick', stepsTaken('m', 12) === 6, stepsTaken('m', 12));
+check('the white mouse steps every tick', stepsTaken('q', 12) === 12, stepsTaken('q', 12));
+
+// A mouse faces the way it last ran sideways, and keeps facing that way when it turns. These
+// test caves leave each mouse a single way out, so its random wandering cannot change the result.
+const facing = new Engine.Cave({
+  name: 'T',
+  gemsNeeded: 1,
+  time: 100,
+  map: ['WWWWWWW', 'W    qW', 'WWWWWWW', 'W.P.WXW', 'WWWWWWW'],
+});
+// Start it heading left along the top row.
+facing.aux[facing.at(5, 1)] = 3;
+facing.tick({ dx: 0, dy: 0, bomb: false }, TICK);
+check(
+  'a mouse running left faces left',
+  facing.tile(4, 1) === Engine.TILE.MOUSE_FAST && facing.facesLeft(facing.at(4, 1)),
+);
+const runner = new Engine.Cave({
+  name: 'T',
+  gemsNeeded: 1,
+  time: 100,
+  map: ['WWWWW', 'WWqWW', 'WW WW', 'WW WW', 'W.PXW', 'WWWWW'],
+});
+// Facing left and heading down a shaft: it should still face left on the way down.
+runner.aux[runner.at(2, 1)] = 2 + 4;
+runner.tick({ dx: 0, dy: 0, bomb: false }, TICK);
+check(
+  'a mouse keeps its facing when it runs down',
+  runner.tile(2, 2) === Engine.TILE.MOUSE_FAST && runner.facesLeft(runner.at(2, 2)),
+);
+
+// Touching any mouse is fatal, even one resting between steps.
+const bite = new Engine.Cave({
+  name: 'T',
+  gemsNeeded: 1,
+  time: 100,
+  map: ['WWWWW', 'WPf W', 'W..XW', 'WWWWW'],
+});
+bite.tick({ dx: 0, dy: 0, bomb: false }, TICK);
+check('a resting mouse still bites', !bite.alive);
 
 // --- Bombs ------------------------------------------------------------------
 const bombTest = new Engine.Cave({

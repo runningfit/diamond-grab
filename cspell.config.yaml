@@ -32,4 +32,4 @@ overrides:
   # The pixel art grids in the game are strings of palette keys, not words.
   - filename: "js/art.js"
     ignoreRegExpList:
-      - "'[.0-9a-k]{16}'"
+      - "'[.0-9a-zA-Z]{16}'"

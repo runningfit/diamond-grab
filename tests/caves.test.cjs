@@ -3,7 +3,7 @@
 // Two passes. The first is deterministic: every cave is flood filled from the miner's starting
 // square to prove that the gem quota and the exit can actually be reached by digging. The second
 // turns a simple path finding bot loose on the opening caves as a smoke test, which is noisier
-// because the monsters move at random.
+// because the mice move at random.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -112,7 +112,7 @@ const routeTo = (cave, wanted) => {
       for (let dx = -2; dx <= 2; dx += 1) {
         const t = cave.tile(x + dx, y + dy);
 
-        if (t === T.MONSTER || t === T.PULSATOR) {
+        if (Engine.MOUSE_PERIOD.has(t)) {
           return true;
         }
       }
@@ -201,7 +201,7 @@ for (let level = 1; level <= 12; level += 1) {
     cleared += 1;
   }
 
-  // Whether the bot survives a given cave depends on where the monsters wander, so only the
+  // Whether the bot survives a given cave depends on where the mice wander, so only the
   // aggregate below is asserted; the per-cave line is here to be read.
   results.push(
     `cave ${String(level).padStart(2)} ${cave.won ? 'cleared' : 'lost   '} ` +

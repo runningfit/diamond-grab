@@ -65,10 +65,10 @@ window.DiamondGrab = window.DiamondGrab || {};
     'DEEP SEAM',
     'THE CRUSHER',
     'BOULDER RUN',
-    'MONSTER PIT',
+    'MOUSE HOLE',
     'GLASS CAVERN',
     'THE GRINDER',
-    'PULSE CHAMBER',
+    'SQUEAK CHAMBER',
     'BLACK GALLERY',
     'ROCK GARDEN',
     'THE LAST DROP',
@@ -110,8 +110,10 @@ window.DiamondGrab = window.DiamondGrab || {};
       gems: 0.035 + ramp * 0.015,
       caverns: 0.12 + ramp * 0.1,
       bricks: step > 2 ? 0.02 + ramp * 0.03 : 0,
-      monsters: step > 0 ? Math.min(5, 1 + Math.floor(step / 3)) : 0,
-      pulsators: step > 2 ? Math.min(4, Math.floor((step - 2) / 3)) : 0,
+      // Slow grey mice from cave C, brown ones from cave G and quick white ones from cave J.
+      slowMice: step > 0 ? Math.min(3, 1 + Math.floor(step / 4)) : 0,
+      mice: step > 4 ? Math.min(3, Math.floor((step - 1) / 4)) : 0,
+      fastMice: step > 7 ? Math.min(2, Math.floor((step - 2) / 6)) : 0,
       bombs: step > 1 ? 1 + Math.floor(step / 6) : 0,
       quota: Math.round(8 + ramp * 16),
       time: Math.max(95, 170 - step * 4),
@@ -294,7 +296,11 @@ window.DiamondGrab = window.DiamondGrab || {};
       }
     }
 
-    const creatures = [...new Array(p.monsters).fill('m'), ...new Array(p.pulsators).fill('p')];
+    const creatures = [
+      ...new Array(p.slowMice).fill('f'),
+      ...new Array(p.mice).fill('m'),
+      ...new Array(p.fastMice).fill('q'),
+    ];
 
     creatures.forEach((kind) => {
       for (let tries = 0; tries < 30; tries += 1) {

@@ -17,11 +17,12 @@ window.DiamondGrab = window.DiamondGrab || {};
     BOULDER: 4,
     GEM: 5,
     PLAYER: 6,
-    MONSTER: 7,
-    PULSATOR: 8,
+    MOUSE_SLOW: 7,
+    MOUSE: 8,
     BOMB: 9,
     EXIT: 10,
     BOOM: 11,
+    MOUSE_FAST: 12,
   };
 
   /** Bit flags held alongside each tile. */
@@ -36,11 +37,25 @@ window.DiamondGrab = window.DiamondGrab || {};
     r: TILE.BOULDER,
     '*': TILE.GEM,
     P: TILE.PLAYER,
-    m: TILE.MONSTER,
-    p: TILE.PULSATOR,
+    f: TILE.MOUSE_SLOW,
+    m: TILE.MOUSE,
+    q: TILE.MOUSE_FAST,
     b: TILE.BOMB,
     X: TILE.EXIT,
   };
+
+  /**
+   * How many ticks each mouse waits between steps: the fat grey mouse moves every third tick, the
+   * brown one every other tick, and the white one every tick, as fast as the miner.
+   */
+  const MOUSE_PERIOD = new Map([
+    [TILE.MOUSE_SLOW, 3],
+    [TILE.MOUSE, 2],
+    [TILE.MOUSE_FAST, 1],
+  ]);
+
+  /** Added to a mouse's direction in `aux` while it faces left. */
+  const FACING_LEFT = 4;
 
   /** Clockwise direction vectors, indexed by the creature direction stored in `aux`. */
   const DIRS = [
@@ -126,7 +141,7 @@ window.DiamondGrab = window.DiamondGrab || {};
             this.playerY = y;
           }
 
-          if (tile === TILE.MONSTER || tile === TILE.PULSATOR) {
+          if (MOUSE_PERIOD.has(tile)) {
             this.aux[index] = (x + y) % DIRS.length;
           }
         }
@@ -371,14 +386,8 @@ window.DiamondGrab = window.DiamondGrab || {};
           return;
         }
 
-        if (below === TILE.MONSTER) {
+        if (MOUSE_PERIOD.has(below)) {
           this.explode(x, y + 1, true);
-
-          return;
-        }
-
-        if (below === TILE.PULSATOR) {
-          this.explode(x, y + 1, false);
 
           return;
         }
@@ -418,60 +427,57 @@ window.DiamondGrab = window.DiamondGrab || {};
     }
 
     /**
-     * Advance a monster, which wanders through open cave and explodes on contact.
+     * Advance a mouse, which wanders through open cave at its own pace and bites on contact. It
+     * keeps facing the way it last ran sideways, so it does not flip round when it turns up or
+     * down.
      * @param {number} x - Column.
      * @param {number} y - Row.
+     * @param {number} tile - Which mouse it is.
      */
-    stepMonster(x, y) {
+    stepMouse(x, y, tile) {
       if (this.touchesPlayer(x, y)) {
         this.explode(x, y, true);
 
         return;
       }
 
+      if (this.ticks % MOUSE_PERIOD.get(tile) !== 0) {
+        return;
+      }
+
       const index = this.at(x, y);
-      const order = [this.aux[index], (this.aux[index] + 1) % 4, (this.aux[index] + 3) % 4];
+      const dir = this.aux[index] % FACING_LEFT;
+      const order = [dir, (dir + 1) % 4, (dir + 3) % 4];
 
       if (Math.random() < 0.25) {
         order.unshift(Math.floor(Math.random() * 4));
       }
 
-      order.push((this.aux[index] + 2) % 4);
-
-      const choice = order.find(
-        (dir) => this.tile(x + DIRS[dir][0], y + DIRS[dir][1]) === TILE.EMPTY,
-      );
-
-      if (choice !== undefined) {
-        this.aux[index] = choice;
-        this.relocate(x, y, x + DIRS[choice][0], y + DIRS[choice][1]);
-      }
-    }
-
-    /**
-     * Advance a pulsator, which hugs the cave walls with a left hand rule.
-     * @param {number} x - Column.
-     * @param {number} y - Row.
-     */
-    stepPulsator(x, y) {
-      if (this.touchesPlayer(x, y)) {
-        this.explode(x, y, false);
-
-        return;
-      }
-
-      const index = this.at(x, y);
-      const dir = this.aux[index];
-      const order = [(dir + 3) % 4, dir, (dir + 1) % 4, (dir + 2) % 4];
+      order.push((dir + 2) % 4);
 
       const choice = order.find(
         (option) => this.tile(x + DIRS[option][0], y + DIRS[option][1]) === TILE.EMPTY,
       );
 
       if (choice !== undefined) {
-        this.aux[index] = choice;
+        let left = this.aux[index] >= FACING_LEFT;
+
+        if (DIRS[choice][0] !== 0) {
+          left = DIRS[choice][0] < 0;
+        }
+
+        this.aux[index] = choice + (left ? FACING_LEFT : 0);
         this.relocate(x, y, x + DIRS[choice][0], y + DIRS[choice][1]);
       }
+    }
+
+    /**
+     * Whether the mouse in a cell is facing left.
+     * @param {number} index - Grid index.
+     * @returns {boolean} True when it faces left.
+     */
+    facesLeft(index) {
+      return this.aux[index] >= FACING_LEFT;
     }
 
     /**
@@ -571,10 +577,8 @@ window.DiamondGrab = window.DiamondGrab || {};
               this.stepBomb(x, y);
             } else if (HEAVY.has(tile)) {
               this.stepHeavy(x, y);
-            } else if (tile === TILE.MONSTER) {
-              this.stepMonster(x, y);
-            } else if (tile === TILE.PULSATOR) {
-              this.stepPulsator(x, y);
+            } else if (MOUSE_PERIOD.has(tile)) {
+              this.stepMouse(x, y, tile);
             } else if (tile === TILE.BOOM) {
               this.stepBoom(x, y);
             }
@@ -592,5 +596,5 @@ window.DiamondGrab = window.DiamondGrab || {};
     }
   }
 
-  NS.Engine = { Cave, TILE, FLAG, CHARS, BOOM_STAGES, BOMB_FUSE, DIRS };
+  NS.Engine = { Cave, TILE, FLAG, CHARS, BOOM_STAGES, BOMB_FUSE, DIRS, MOUSE_PERIOD };
 })(window.DiamondGrab);
