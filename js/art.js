@@ -31,6 +31,8 @@ window.DiamondGrab = window.DiamondGrab || {};
     i: '#4b2384',
     j: '#a964e8',
     k: '#1b1b26',
+    l: '#f29bbd',
+    m: '#b8607e',
   };
 
   const GRID = 16;
@@ -323,83 +325,148 @@ window.DiamondGrab = window.DiamondGrab || {};
   };
 
   /**
-   * Paint a monster: a red crawler that wanders the open caves.
-   * @param {number} frame - Animation frame.
-   * @returns {string[][]} The pixel grid.
+   * The three cave mice, standing upright and as tall as the miner, drawn facing right. The rows
+   * use stand-in letters rather than palette keys so one drawing serves each coat: B is the
+   * coat, S its shade, L the belly and face, P pink (ears, nose, hands and feet), Q the tail and
+   * E the eye. Each has two frames, a stride and a step.
    */
-  const monsterGrid = (frame) => {
-    const grid = blank();
+  const MICE = {
+    // Slow: a chubby grey mouse with a round belly and short legs.
+    slow: [
+      fromRows([
+        '...SSS..........',
+        '..SPPPS.........',
+        '..SPPPBBB.......',
+        '...SSBBBBB......',
+        '....BBBBBB......',
+        '....BBBBEBB.....',
+        '.....BBBBBLLP...',
+        '.....SBBBLLL....',
+        '....SBBLLLL.....',
+        '...SBBLLLLLLP...',
+        'Q..SBBLLLLLL....',
+        '.Q.SBBLLLLLL....',
+        '..QSSBBLLLL.....',
+        '...QSSBBBB......',
+        '.....PP.PP......',
+        '....PPP.PPP.....',
+      ]),
+      fromRows([
+        '...SSS..........',
+        '..SPPPS.........',
+        '..SPPPBBB.......',
+        '...SSBBBBB......',
+        '....BBBBBB......',
+        '....BBBBEBB.....',
+        '.....BBBBBLLP...',
+        '.....SBBBLLL....',
+        '....SBBLLLL.....',
+        '...SBBLLLLLLP...',
+        '...SBBLLLLLL....',
+        'Q..SBBLLLLLL....',
+        '.QQSSBBLLLL.....',
+        '...QSSBBBB......',
+        '......PPP.......',
+        '.....PPP.PP.....',
+      ]),
+    ],
+    // Medium: a brown mouse, upright and alert.
+    medium: [
+      fromRows([
+        '....SSS.........',
+        '...SPPPS........',
+        '...SPPPBBB......',
+        '....SSBBBBB.....',
+        '.....BBBBBB.....',
+        '.....BBBBEBB....',
+        '......BBBBBLLP..',
+        '......SBBBLL....',
+        '......SBBLL.....',
+        '.....SBBLLLP....',
+        '..Q..SBBLLL.....',
+        '.Q...SBBLLL.....',
+        '.Q..SSBBBB......',
+        '..QQSB..BB......',
+        '.....B...B......',
+        '....PP...PP.....',
+      ]),
+      fromRows([
+        '....SSS.........',
+        '...SPPPS........',
+        '...SPPPBBB......',
+        '....SSBBBBB.....',
+        '.....BBBBBB.....',
+        '.....BBBBEBB....',
+        '......BBBBBLLP..',
+        '......SBBBLL....',
+        '......SBBLL.....',
+        '.....SBBLLLP....',
+        '.....SBBLLL.....',
+        'Q....SBBLLL.....',
+        '.Q..SSBBBB......',
+        '..QQS.BBB.......',
+        '......BB........',
+        '.....PPP........',
+      ]),
+    ],
+    // Fast: a skinny white mouse with red eyes, leaning into a long stride.
+    fast: [
+      fromRows([
+        '.....SSS........',
+        '....SPPPS.......',
+        '....SPPPBBB.....',
+        '.....SSBBBBB....',
+        '......BBBBBB....',
+        '......BBBBEBB...',
+        '.......BBBBBLLP.',
+        '......SBBBLL....',
+        '.....SBBLL......',
+        '....SBBLLP......',
+        '...SBBLL........',
+        'QQ.SBBL.........',
+        '..QSBB..........',
+        '..SB.BB.........',
+        '.SB....BB.......',
+        'PP......PP......',
+      ]),
+      fromRows([
+        '.....SSS........',
+        '....SPPPS.......',
+        '....SPPPBBB.....',
+        '.....SSBBBBB....',
+        '......BBBBBB....',
+        '......BBBBEBB...',
+        '.......BBBBBLLP.',
+        '......SBBBLL....',
+        '.....SBBLL......',
+        '....SBBLLP......',
+        '...SBBLL........',
+        '..QSBBL.........',
+        'QQ.SBB..........',
+        '....BB..........',
+        '....BB..........',
+        '...PPP..........',
+      ]),
+    ],
+  };
 
-    sphere(grid, ['e', 'e', 'f', 'f', 'g'], 6.6);
-
-    const wiggle = frame % 2 === 0 ? 1 : -1;
-
-    [2, 7, 12].forEach((x) => {
-      put(grid, x, 13 + (wiggle > 0 ? 0 : 1), 'e');
-      put(grid, x, 14, 'e');
-      put(grid, x + wiggle, 15, 'e');
-    });
-
-    [[5], [10]].forEach(([x]) => {
-      put(grid, x, 5, '8');
-      put(grid, x + 1, 5, '8');
-      put(grid, x, 6, '8');
-      put(grid, x + 1, 6, '0');
-    });
-
-    put(grid, 6, 10, '0');
-    put(grid, 7, 11, '0');
-    put(grid, 8, 11, '0');
-    put(grid, 9, 10, '0');
-
-    return grid;
+  /** Coat colors for each mouse, as palette keys for the stand-in letters above. */
+  const COATS = {
+    slow: { B: '7', S: '6', L: '8', P: 'l', Q: 'm', E: '0' },
+    medium: { B: '3', S: '2', L: '4', P: 'l', Q: 'm', E: '0' },
+    fast: { B: '8', S: '7', L: '8', P: 'l', Q: 'm', E: 'f' },
   };
 
   /**
-   * Paint a pulsator: a pulsing green creature that hugs the cave walls.
-   * @param {number} frame - Animation frame.
-   * @returns {string[][]} The pixel grid.
+   * Paint one of the cave mice.
+   * @param {string} kind - Which mouse: slow, medium or fast.
+   * @returns {(frame: number) => string[][]} A painter taking the animation frame and returning
+   * the pixel grid.
    */
-  const pulsatorGrid = (frame) => {
-    const grid = blank();
-    const pulse = frame % 2;
-    const outer = 7 - pulse;
-
-    for (let y = 0; y < GRID; y += 1) {
-      for (let x = 0; x < GRID; x += 1) {
-        const dx = Math.abs(x + 0.5 - 8);
-        const dy = Math.abs(y + 0.5 - 8);
-        const ring = Math.max(dx, dy);
-
-        if (ring <= outer) {
-          let color = 'c';
-
-          if (ring > outer - 1.5) {
-            color = 'd';
-          } else if (ring < 2.5) {
-            color = pulse ? 'h' : 'd';
-          } else if (ring < 4) {
-            color = 'c';
-          }
-
-          put(grid, x, y, color);
-        }
-      }
-    }
-
-    const tip = pulse ? 'h' : 'd';
-
-    [-1, 0, 1].forEach((offset) => {
-      const near = Math.abs(offset) === 1 ? 1 : 0;
-
-      put(grid, 8 + offset, near, tip);
-      put(grid, 8 + offset, 15 - near, tip);
-      put(grid, near, 8 + offset, tip);
-      put(grid, 15 - near, 8 + offset, tip);
-    });
-
-    return grid;
-  };
+  const mouseGrid = (kind) => (frame) =>
+    MICE[kind][frame % MICE[kind].length].map((row) =>
+      row.map((key) => (key === '.' ? '.' : COATS[kind][key])),
+    );
 
   /**
    * Paint the cave exit, either sealed or flashing open.
@@ -609,8 +676,9 @@ window.DiamondGrab = window.DiamondGrab || {};
     player: { frames: 3, paint: spacemanGrid },
     playerUp: { frames: 3, paint: spacemanUpGrid },
     playerDown: { frames: 3, paint: spacemanDownGrid },
-    monster: { frames: 2, paint: monsterGrid },
-    pulsator: { frames: 2, paint: pulsatorGrid },
+    mouseSlow: { frames: 2, paint: mouseGrid('slow') },
+    mouse: { frames: 2, paint: mouseGrid('medium') },
+    mouseFast: { frames: 2, paint: mouseGrid('fast') },
     bomb: { frames: 2, paint: bombIdleGrid },
     bombArmed: { frames: 2, paint: bombLitGrid },
     exitClosed: { frames: 1, paint: exitClosedGrid },

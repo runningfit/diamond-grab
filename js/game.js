@@ -412,7 +412,7 @@
         title: 'DIAMOND GRAB',
         text:
           'Dig through the caves, grab the diamonds, then run for the exit before the ' +
-          'clock beats you. Rocks fall when you dig under them, and they crush monsters ' +
+          'clock beats you. Rocks fall when you dig under them, and they crush mice ' +
           'and miners alike.',
         keys: [
           'Arrows, WASD or the thumb stick to dig',
@@ -743,7 +743,8 @@
      * Pick the sprite for one cell.
      * @param {number} index - Grid index.
      * @param {number} beat - Animation counter.
-     * @returns {object|null} Sprite name and frame, or null for empty cave.
+     * @returns {object|null} Sprite name and frame, and whether to mirror it, or null for empty
+     * cave.
      */
     spriteFor(index, beat) {
       const { cave } = this;
@@ -760,10 +761,12 @@
           return { name: 'boulder', frame: 0 };
         case TILE.GEM:
           return { name: 'gem', frame: beat };
-        case TILE.MONSTER:
-          return { name: 'monster', frame: beat };
-        case TILE.PULSATOR:
-          return { name: 'pulsator', frame: beat };
+        case TILE.MOUSE_SLOW:
+          return { name: 'mouseSlow', frame: beat, flip: cave.facesLeft(index) };
+        case TILE.MOUSE:
+          return { name: 'mouse', frame: beat, flip: cave.facesLeft(index) };
+        case TILE.MOUSE_FAST:
+          return { name: 'mouseFast', frame: beat, flip: cave.facesLeft(index) };
         case TILE.BOMB:
           return (cave.flags[index] & FLAG.ARMED) !== 0
             ? { name: 'bombArmed', frame: cave.aux[index] < 6 ? cave.ticks : beat }
@@ -838,7 +841,7 @@
               playerAt = { x: (px - originX) / tileSize, y: (py - originY) / tileSize };
             }
 
-            if (sprite.player && cave.facing < 0) {
+            if (sprite.flip || (sprite.player && cave.facing < 0)) {
               ctx.save();
               ctx.translate(px + tileSize, py);
               ctx.scale(-1, 1);

@@ -66,8 +66,7 @@ By default the music shuffles, with a different tune for each new cave (retrying
 - **Diamonds** open the exit once you have the quota shown in the status bar. Diamonds grabbed after the quota are worth double.
 - **Rocks and diamonds fall** when the earth beneath them is dug away, and they roll off the top of other rocks, diamonds and brick. Anything falling on your head kills you — once a rock is falling you cannot outrun it.
 - **Rocks push** sideways into empty space, so a wall of rock can be shifted one cell at a time.
-- **Monsters** wander the open caves at random. Drop a rock on one and it bursts into diamonds; touch one and you both go up.
-- **Pulsators** follow the cave walls rather than wandering, and are worth nothing — trap them or stay out of their way.
+- **Mice** stand as tall as you and wander the open caves, and touching one is fatal. There are three, told apart by their coats and how fast they run: the chubby **grey mouse** steps every third tick, the **brown mouse** every other tick, and the skinny **white mouse** with red eyes every tick, as fast as you. Drop a rock on any of them and it bursts into diamonds. Grey mice turn up from cave C, brown from cave G and white from cave J.
 - **Bombs** are picked up by walking over them and dropped in front of you with Space. The fuse is about two seconds and the blast clears a three by three hole through earth, brick, rock and anything alive in it, including you.
 - **Steel walls** survive everything. Brick does not.
 - **The clock** kills you when it reaches zero; whatever is left on it when you escape is worth 5 points a second.
