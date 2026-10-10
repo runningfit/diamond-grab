@@ -20,6 +20,10 @@ To play locally, open `index.html` in a browser or serve the folder:
 npm start   # then open http://localhost:8080
 ```
 
+### Free to play
+
+The game is free with no ads. The start and game over screens carry a small link to a [Ko-fi tip jar](https://ko-fi.com/runningfit) that helps cover the domain; it never appears during play.
+
 ### On your phone
 
 The game installs to the home screen and runs full screen, and once it has been opened online it plays with no connection at all.

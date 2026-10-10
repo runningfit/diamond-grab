@@ -153,9 +153,8 @@ body.touch .stage {
   inset: 0;
   z-index: 3;
   display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 12px;
+  overflow-y: auto;
   background: rgb(5 5 10 / 82%);
 }
 
@@ -165,6 +164,9 @@ body.touch .stage {
 
 .panel {
   width: min(420px, 100%);
+  /* Auto margins center the panel, and on a screen too short for it (a phone held sideways) they
+     give way so the panel scrolls from its top instead of being cut off at both ends. */
+  margin: auto;
   padding: 18px 20px 20px;
   text-align: center;
   background: var(--cabinet);
@@ -317,6 +319,30 @@ body.touch .stage {
 
 .segmented button:focus-visible,
 .big-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.support-link {
+  display: block;
+  margin: 10px auto -8px;
+  padding: 10px 8px;
+  color: var(--dim);
+  font-size: clamp(11px, 3vw, 13px);
+  text-decoration: none;
+}
+
+.support-link[hidden] {
+  display: none;
+}
+
+.support-link:hover,
+.support-link:focus-visible {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.support-link:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
