@@ -82,6 +82,7 @@
       this.panelText = document.getElementById('panel-text');
       this.panelKeys = document.getElementById('panel-keys');
       this.panelButton = document.getElementById('panel-button');
+      this.supportLink = document.getElementById('support-link');
       this.touchLayer = document.getElementById('touch-layer');
       this.hud = {
         cave: document.getElementById('hud-cave'),
@@ -420,6 +421,7 @@
           this.highScore ? `Best score ${pad(this.highScore, 6)}` : '',
         ],
         button: 'START',
+        support: true,
       });
     }
 
@@ -520,6 +522,7 @@
           text: `You reached cave ${Levels.caveLabel(this.level)} — ${this.cave.name}.`,
           keys: [`Score ${pad(this.score, 6)}`, `Best ${pad(this.highScore, 6)}`],
           button: 'PLAY AGAIN',
+          support: true,
         });
 
         return;
@@ -556,8 +559,10 @@
      * @param {string} options.text - Body copy.
      * @param {string[]} options.keys - Short lines listed under the body.
      * @param {string} options.button - Button label.
+     * @param {boolean} [options.support] - Whether to offer the tip jar link. It only appears on
+     * the start and game over screens, never between caves or while paused.
      */
-    showPanel({ title, text, keys, button }) {
+    showPanel({ title, text, keys, button, support = false }) {
       this.panelTitle.textContent = title;
       this.panelText.textContent = text;
       this.panelKeys.replaceChildren(
@@ -570,6 +575,7 @@
         }),
       );
       this.panelButton.textContent = button;
+      this.supportLink.hidden = !support;
       this.overlay.hidden = false;
     }
 

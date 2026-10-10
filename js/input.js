@@ -175,6 +175,11 @@ window.DiamondGrab = window.DiamondGrab || {};
           NumpadEnter: 'confirm',
         };
 
+        // Enter on a focused link follows the link rather than starting a game.
+        if (event.target.closest?.('a')) {
+          return;
+        }
+
         if (actions[event.code]) {
           event.preventDefault();
           this.onAction(actions[event.code]);
