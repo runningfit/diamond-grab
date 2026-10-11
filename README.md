@@ -22,7 +22,9 @@ npm start   # then open http://localhost:8080
 
 ### Free to play
 
-The game is free with no ads. The start and game over screens carry a small link to a [Ko-fi tip jar](https://ko-fi.com/runningfit) that helps cover the domain; it never appears during play.
+The game is free with no ads. The start and game over screens carry a small link to a [Ko-fi tip jar](https://ko-fi.com/runningfit) that helps cover the domain; it never appears during play. The game over screen also offers to share your score, through the phone's share sheet or, where there is none, by copying a message and the link.
+
+Links to the game unfurl into a preview card in messages and social posts, using `icons/share.png` (1200 × 630, drawn from the game's own sprites) and the preview tags in `index.html`. Those tags name `https://runningfit.github.io/diamond-grab/`; the deploy rewrites that to wherever Pages publishes the site, so they follow a custom domain without any change here.
 
 ### On your phone
 
@@ -82,7 +84,7 @@ Caves A and B are hand drawn to teach digging and rock pushing. Everything after
 | `index.html`           | The page, the status bar, the panels and the touch controls       |
 | `manifest.webmanifest` | App name, colors and icons for installing to the home screen      |
 | `sw.js`                | Service worker that caches the game for offline play              |
-| `icons/`               | Home screen icons, rendered from the game's own diamond sprite    |
+| `icons/`               | Home screen icons and the link preview card, from the game's art  |
 | `css/style.css`        | Cabinet styling, responsive layout, the on screen pad             |
 | `js/art.js`            | The palette and every sprite, drawn on a 16×16 pixel grid in code |
 | `js/audio.js`          | Web Audio sound effects, generated at runtime                     |

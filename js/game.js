@@ -83,6 +83,7 @@
       this.panelKeys = document.getElementById('panel-keys');
       this.panelButton = document.getElementById('panel-button');
       this.supportLink = document.getElementById('support-link');
+      this.shareButton = document.getElementById('share-button');
       this.touchLayer = document.getElementById('touch-layer');
       this.hud = {
         cave: document.getElementById('hud-cave'),
@@ -173,6 +174,7 @@
         this.unlockAudio();
         this.action('confirm');
       });
+      this.shareButton.addEventListener('click', () => this.shareScore());
       document.getElementById('music-prev').addEventListener('click', () => this.stepMusic(-1));
       document.getElementById('music-next').addEventListener('click', () => this.stepMusic(1));
       this.controlPicker.querySelectorAll('[data-mode]').forEach((choice) => {
@@ -230,7 +232,15 @@
      * @param {object} song - The tune that started.
      */
     announce(song) {
-      this.toast.textContent = `♪ ${song.title}`;
+      this.showToast(`♪ ${song.title}`);
+    }
+
+    /**
+     * Show a short message over the cave for a moment.
+     * @param {string} message - What to say.
+     */
+    showToast(message) {
+      this.toast.textContent = message;
       this.toast.hidden = false;
       this.toast.classList.remove('show');
       // Restart the fade even when one tune follows another quickly.
@@ -239,6 +249,35 @@
       this.toastTimer = window.setTimeout(() => {
         this.toast.hidden = true;
       }, 2800);
+    }
+
+    /**
+     * Share the score from the game over screen: through the phone's share sheet where there is
+     * one, otherwise by copying a message and the link to the clipboard.
+     */
+    async shareScore() {
+      const url = window.location.href.split(/[?#]/)[0];
+
+      const text =
+        `I reached cave ${Levels.caveLabel(this.level)} in Diamond Grab with ` +
+        `${this.score} points. Can you beat it?`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: 'Diamond Grab', text, url });
+        } catch {
+          // Closing the share sheet without picking anything lands here; nothing to do.
+        }
+
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        this.showToast('Link copied, paste it anywhere');
+      } catch {
+        this.showToast(url);
+      }
     }
 
     /**
@@ -523,6 +562,7 @@
           keys: [`Score ${pad(this.score, 6)}`, `Best ${pad(this.highScore, 6)}`],
           button: 'PLAY AGAIN',
           support: true,
+          share: true,
         });
 
         return;
@@ -561,8 +601,9 @@
      * @param {string} options.button - Button label.
      * @param {boolean} [options.support] - Whether to offer the tip jar link. It only appears on
      * the start and game over screens, never between caves or while paused.
+     * @param {boolean} [options.share] - Whether to offer to share the score, on game over.
      */
-    showPanel({ title, text, keys, button, support = false }) {
+    showPanel({ title, text, keys, button, support = false, share = false }) {
       this.panelTitle.textContent = title;
       this.panelText.textContent = text;
       this.panelKeys.replaceChildren(
@@ -576,6 +617,7 @@
       );
       this.panelButton.textContent = button;
       this.supportLink.hidden = !support;
+      this.shareButton.hidden = !share;
       this.overlay.hidden = false;
     }
 

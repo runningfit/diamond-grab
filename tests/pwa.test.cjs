@@ -104,5 +104,33 @@ check(
   [...sizes].some((s) => s.endsWith('maskable')),
 );
 
+// Link previews: the deploy swaps this address for the published one, so every preview tag has to
+// use it, and the card image has to be the size the big preview cards expect.
+const SITE = 'https://runningfit.github.io/diamond-grab/';
+const meta = (key) => {
+  const found = html.match(new RegExp(`(?:property|name)="${key}"\\s+content="([^"]*)"`));
+
+  return found ? found[1] : '';
+};
+
+check('og:url is the site address', meta('og:url') === SITE, meta('og:url'));
+check(
+  'og:image is the share card',
+  meta('og:image') === `${SITE}icons/share.png`,
+  meta('og:image'),
+);
+check(
+  'the canonical link is the site address',
+  html.includes(`<link rel="canonical" href="${SITE}" />`),
+);
+check('a large preview card is asked for', meta('twitter:card') === 'summary_large_image');
+check('the share card exists', fs.existsSync(path.join(GAME, 'icons/share.png')));
+
+if (fs.existsSync(path.join(GAME, 'icons/share.png'))) {
+  const { width, height } = pngSize(path.join(GAME, 'icons/share.png'));
+
+  check('the share card is 1200 x 630', width === 1200 && height === 630, `${width}x${height}`);
+}
+
 console.log(failures === 0 ? '\nALL PWA TESTS PASSED' : `\n${failures} FAILURE(S)`);
 process.exit(failures === 0 ? 0 : 1);
