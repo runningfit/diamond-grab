@@ -26,6 +26,8 @@ The game is free with no ads. The start and game over screens carry a small link
 
 Links to the game unfurl into a preview card in messages and social posts, using `icons/share.png` (1200 × 630, drawn from the game's own sprites) and the preview tags in `index.html`. Those tags name `https://runningfit.github.io/diamond-grab/`; the deploy rewrites that to wherever Pages publishes the site, so they follow a custom domain without any change here.
 
+For search engines there is a descriptive page title, a `VideoGame` description in JSON-LD in `index.html`, `robots.txt` and `sitemap.xml`. They use the same address as the preview tags, and the deploy rewrites them the same way and stamps the sitemap with the deploy date.
+
 ### On your phone
 
 The game installs to the home screen and runs full screen, and once it has been opened online it plays with no connection at all.
@@ -84,6 +86,8 @@ Caves A and B are hand drawn to teach digging and rock pushing. Everything after
 | `index.html`           | The page, the status bar, the panels and the touch controls       |
 | `manifest.webmanifest` | App name, colors and icons for installing to the home screen      |
 | `sw.js`                | Service worker that caches the game for offline play              |
+| `robots.txt`           | Lets search engines in and points them at the sitemap             |
+| `sitemap.xml`          | The one page there is, for search engines                         |
 | `icons/`               | Home screen icons and the link preview card, from the game's art  |
 | `css/style.css`        | Cabinet styling, responsive layout, the on screen pad             |
 | `js/art.js`            | The palette and every sprite, drawn on a 16×16 pixel grid in code |

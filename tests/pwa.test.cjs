@@ -132,5 +132,37 @@ if (fs.existsSync(path.join(GAME, 'icons/share.png'))) {
   check('the share card is 1200 x 630', width === 1200 && height === 630, `${width}x${height}`);
 }
 
+// Search engines: a robots file and sitemap naming the site, and a description of the game that
+// parses, all on the address the deploy rewrites.
+const robots = fs.readFileSync(path.join(GAME, 'robots.txt'), 'utf8');
+const sitemap = fs.readFileSync(path.join(GAME, 'sitemap.xml'), 'utf8');
+
+check(
+  'robots.txt allows everything',
+  /^User-agent: \*$/m.test(robots) && /^Allow: \/$/m.test(robots),
+);
+check('robots.txt names the sitemap', robots.includes(`Sitemap: ${SITE}sitemap.xml`));
+check('the sitemap lists the site', sitemap.includes(`<loc>${SITE}</loc>`));
+check(
+  'the sitemap has a date the deploy can update',
+  /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/.test(sitemap),
+);
+
+const ldBlock = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+let ld = null;
+
+try {
+  ld = JSON.parse(ldBlock[1]);
+} catch {
+  ld = null;
+}
+
+check('the page describes the game for search engines', Boolean(ld) && ld['@type'] === 'VideoGame');
+check(
+  'that description names the site',
+  Boolean(ld) && ld.url === SITE && ld.image === `${SITE}icons/share.png`,
+);
+check('the page title names the game', /<title>Diamond Grab[^<]*<\/title>/.test(html));
+
 console.log(failures === 0 ? '\nALL PWA TESTS PASSED' : `\n${failures} FAILURE(S)`);
 process.exit(failures === 0 ? 0 : 1);

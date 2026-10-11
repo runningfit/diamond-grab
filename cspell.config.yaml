@@ -21,12 +21,14 @@ words:
   - Eterna
   - headlessly
   - jsdoc
+  - lastmod
   - playfield
   - pulsator
   - pulsators
   - Rockslide
   - Rockfall
   - singleline
+  - urlset
   - WASD
 overrides:
   # The pixel art grids in the game are strings of palette keys, not words.

@@ -9,13 +9,13 @@
     <meta name="theme-color" content="#101018" />
     <meta
       name="description"
-      content="Diamond Grab — dig through the caves, grab the diamonds and dodge the falling rocks. Free to play in your browser or on your phone."
+      content="Dig through the caves, grab the diamonds and dodge the falling rocks and mouse men. A free cave digging game with no ads that plays in your browser or on your phone."
     />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Diamond Grab" />
-    <title>Diamond Grab</title>
+    <title>Diamond Grab: free cave digging game to play online</title>
     <!-- Link previews in messages and social posts. The deploy rewrites this address to wherever
          the site is published, so it follows a custom domain. -->
     <meta property="og:type" content="website" />
@@ -35,6 +35,28 @@
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://runningfit.github.io/diamond-grab/" />
+    <!-- Tells search engines what the page is: a free game. The deploy rewrites its address too. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Diamond Grab",
+        "url": "https://runningfit.github.io/diamond-grab/",
+        "image": "https://runningfit.github.io/diamond-grab/icons/share.png",
+        "description": "Dig through the caves, grab the diamonds and dodge the falling rocks and mouse men. A free cave digging game with no ads that plays in your browser or on your phone.",
+        "genre": ["Arcade", "Puzzle"],
+        "playMode": "SinglePlayer",
+        "gamePlatform": ["Web browser", "Android", "iOS"],
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "AUD"
+        }
+      }
+    </script>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="css/style.css" />
@@ -98,7 +120,10 @@
         <div class="overlay" id="overlay" hidden>
           <div class="panel" id="panel">
             <h1 class="panel-title" id="panel-title">DIAMOND GRAB</h1>
-            <p class="panel-text" id="panel-text"></p>
+            <p class="panel-text" id="panel-text">
+              Dig through the caves, grab the diamonds, then run for the exit before the clock beats
+              you. Rocks fall when you dig under them, and they crush mice and miners alike.
+            </p>
             <div class="panel-keys" id="panel-keys"></div>
             <div class="music-row" role="group" aria-label="Music">
               <button

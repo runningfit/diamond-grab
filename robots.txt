@@ -1,0 +1,5 @@
+# Everything here is the game; search engines are welcome to all of it.
+User-agent: *
+Allow: /
+
+Sitemap: https://runningfit.github.io/diamond-grab/sitemap.xml
