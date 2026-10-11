@@ -16,6 +16,25 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Diamond Grab" />
     <title>Diamond Grab</title>
+    <!-- Link previews in messages and social posts. The deploy rewrites this address to wherever
+         the site is published, so it follows a custom domain. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Diamond Grab" />
+    <meta property="og:title" content="Diamond Grab" />
+    <meta
+      property="og:description"
+      content="Dig. Grab. Don't get squashed. A free cave digging game with no ads that plays in your browser or on your phone."
+    />
+    <meta property="og:url" content="https://runningfit.github.io/diamond-grab/" />
+    <meta property="og:image" content="https://runningfit.github.io/diamond-grab/icons/share.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Diamond Grab: a red spaceman cuts through a cave of rocks and diamonds while three mouse men run at him."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://runningfit.github.io/diamond-grab/" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="css/style.css" />
@@ -116,6 +135,9 @@
               <button type="button" role="radio" data-mode="pad" aria-checked="false">D-pad</button>
             </div>
             <button type="button" class="big-button" id="panel-button">START</button>
+            <button type="button" class="share-button" id="share-button" hidden>
+              Share your score
+            </button>
             <a
               class="support-link"
               id="support-link"
